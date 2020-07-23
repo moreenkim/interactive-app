@@ -1,9 +1,13 @@
+const User = require('../models/User');
+
 exports.login = function () {};
 
 exports.logout = function () {};
 
 exports.register = function (req, res) {
-  res.send('thanks for trying to reg');
+  let user = new User(req.body);
+  user.register();
+  res.send('thanks for try');
 };
 
 exports.home = function (req, res) {
