@@ -1,9 +1,9 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const mongodb = require('mongodb');
 
-const connectionString =
-  'mongodb+srv://todoAppUser:todoApp@cluster0.meydx.mongodb.net/InteractiveApp?retryWrites=true&w=majority';
 mongodb.connect(
-  connectionString,
+  process.env.CONNECTIONSTRING,
   { useNewUrlParser: true, useUnifiedTopology: true },
   function (err, client) {
     module.exports = client.db();
