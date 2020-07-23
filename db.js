@@ -9,6 +9,6 @@ mongodb.connect(
     module.exports = client.db();
     const app = require('./app');
 
-    app.listen(3001);
+    app.listen(process.env.PORT);
   }
 );
