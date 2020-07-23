@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+const router = require('./router.js');
+
 app.use(express.static('public'));
 
 app.set('views', 'views');
