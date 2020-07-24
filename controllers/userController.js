@@ -27,7 +27,7 @@ exports.register = function (req, res) {
 
 exports.home = function (req, res) {
   if (req.session.user) {
-    res.send('welcome to the application!');
+    res.render('home-dashboard');
   } else {
     res.render('home-guest');
   }
