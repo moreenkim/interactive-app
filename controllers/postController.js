@@ -5,11 +5,11 @@ exports.viewCreateScreen = function (req, res) {
 };
 
 exports.create = function (req, res) {
-  let post = new Post(req.body);
+  let post = new Post(req.body, req.session.user._id);
   post
     .create()
     .then(function () {
-      res.send('new post created');
+      res.send('New post created.');
     })
     .catch(function (errors) {
       res.send(errors);
