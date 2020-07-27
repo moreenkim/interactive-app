@@ -1,11 +1,12 @@
-<%- include('includes/header')%>
+<%- include('includes/header') %>
 
 <div class="container py-md-5 container--narrow">
   <div class="d-flex justify-content-between">
     <h2><%= post.title %></h2>
+    <% if (post.isVisitorOwner) { %>
     <span class="pt-2">
       <a
-        href="#"
+        href="/post/<%= post._id %>/edit"
         class="text-primary mr-2"
         data-toggle="tooltip"
         data-placement="top"
@@ -23,12 +24,13 @@
         </button>
       </form>
     </span>
+    <% } %>
   </div>
 
   <p class="text-muted small mb-4">
-    <a href="#"><img class="avatar-tiny" src="<%=post.author.avatar %>" /></a>
-    Posted by <a href="#"> <%=post.author.username %></a> on <%=
-    post.createdDate.getMonth() + 1%>/<%= post.createdDate.getDate() %>/<%=
+    <a href="#"><img class="avatar-tiny" src="<%= post.author.avatar %>" /></a>
+    Posted by <a href="#"><%= post.author.username %></a> on <%=
+    post.createdDate.getMonth() + 1 %>/<%= post.createdDate.getDate() %>/<%=
     post.createdDate.getFullYear() %>
   </p>
 
@@ -37,5 +39,4 @@
   </div>
 </div>
 
-<!-- footer begins -->
-<%- include('includes/footer')%>
+<%- include('includes/footer') %>

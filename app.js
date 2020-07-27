@@ -16,6 +16,13 @@ app.use(sessionOptions);
 app.use(flash());
 
 app.use(function (req, res, next) {
+  //make current user id available on req object
+  if (req.session.user) {
+    req.visitorId = req.session.user._id;
+  } else {
+    req.visitorId = 0;
+  }
+  //make session data available for templates
   res.locals.user = req.session.user;
   next();
 });
