@@ -61,7 +61,7 @@ Post.prototype.update = function () {
     try {
       let post = await Post.findSingleById(this.requestedPostId, this.userid);
       if (post.isVisitorOwner) {
-        //update db
+        // actually update the db
         let status = await this.actuallyUpdate();
         resolve(status);
       } else {
@@ -77,7 +77,6 @@ Post.prototype.actuallyUpdate = function () {
   return new Promise(async (resolve, reject) => {
     this.cleanUp();
     this.validate();
-
     if (!this.errors.length) {
       await postsCollection.findOneAndUpdate(
         { _id: new ObjectID(this.requestedPostId) },
@@ -111,24 +110,28 @@ Post.reusablePostQuery = function (uniqueOperations, visitorId) {
         },
       },
     ]);
+
     let posts = await postsCollection.aggregate(aggOperations).toArray();
 
-    //CLEANUP AUTHOR PROPERTY IN EACH POST OBJECT
+    // clean up author property in each post object
     posts = posts.map(function (post) {
       post.isVisitorOwner = post.authorId.equals(visitorId);
+
       post.author = {
         username: post.author.username,
         avatar: new User(post.author, true).avatar,
       };
+
       return post;
     });
+
     resolve(posts);
   });
 };
 
 Post.findSingleById = function (id, visitorId) {
   return new Promise(async function (resolve, reject) {
-    if (typeof id !== 'string' || !ObjectID.isValid(id)) {
+    if (typeof id != 'string' || !ObjectID.isValid(id)) {
       reject();
       return;
     }

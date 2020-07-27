@@ -68,9 +68,7 @@ exports.home = function (req, res) {
   if (req.session.user) {
     res.render('home-dashboard');
   } else {
-    res.render('home-guest', {
-      regErrors: req.flash('regErrors'),
-    });
+    res.render('home-guest', { regErrors: req.flash('regErrors') });
   }
 };
 
@@ -86,7 +84,7 @@ exports.ifUserExists = function (req, res, next) {
 };
 
 exports.profilePostsScreen = function (req, res) {
-  //ask post model for posts by author id
+  // ask our post model for posts by a certain author id
   Post.findByAuthorId(req.profileUser._id)
     .then(function (posts) {
       res.render('profile', {
@@ -95,7 +93,6 @@ exports.profilePostsScreen = function (req, res) {
         profileAvatar: req.profileUser.avatar,
       });
     })
-
     .catch(function () {
       res.render('404');
     });

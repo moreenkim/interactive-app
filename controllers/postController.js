@@ -28,7 +28,12 @@ exports.viewSingle = async function (req, res) {
 exports.viewEditScreen = async function (req, res) {
   try {
     let post = await Post.findSingleById(req.params.id);
-    res.render('edit-post', { post: post });
+    if (post.authorId === req.visitorId) {
+      res.render('edit-post', { post: post });
+    } else {
+      req.flash('errors', 'you do not have permission to perform this task');
+      req.session.save(() => res.redirect('/'));
+    }
   } catch {
     res.render('404');
   }
@@ -39,10 +44,11 @@ exports.edit = function (req, res) {
   post
     .update()
     .then((status) => {
-      //post was successfully update
-      //had permission but there was validation errors
-      if (status === 'success') {
-        req.flash('success', 'post succesfully updated');
+      // the post was successfully updated in the database
+      // or user did have permission, but there were validation errors
+      if (status == 'success') {
+        // post was updated in db
+        req.flash('success', 'Post successfully updated.');
         req.session.save(function () {
           res.redirect(`/post/${req.params.id}/edit`);
         });
@@ -56,9 +62,9 @@ exports.edit = function (req, res) {
       }
     })
     .catch(() => {
-      //post doesnt exist
-      //or current visitor isnt owner of post
-      req.flash('errors', 'you do not hav permission for the task');
+      // a post with the requested id doesn't exist
+      // or if the current visitor is not the owner of the requested post
+      req.flash('errors', 'You do not have permission to perform that action.');
       req.session.save(function () {
         res.redirect('/');
       });
