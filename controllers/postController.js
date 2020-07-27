@@ -33,3 +33,34 @@ exports.viewEditScreen = async function (req, res) {
     res.render('404');
   }
 };
+
+exports.edit = function (req, res) {
+  let post = new Post(req.body, req.visitorId, req.params.id);
+  post
+    .update()
+    .then((status) => {
+      //post was successfully update
+      //had permission but there was validation errors
+      if (status === 'success') {
+        req.flash('success', 'post succesfully updated');
+        req.session.save(function () {
+          res.redirect(`/post/${req.params.id}/edit`);
+        });
+      } else {
+        post.errors.forEach(function (error) {
+          req.flash('errors', error);
+        });
+        req.session.save(function () {
+          res.redirect(`/post/${req.params.id}/edit`);
+        });
+      }
+    })
+    .catch(() => {
+      //post doesnt exist
+      //or current visitor isnt owner of post
+      req.flash('errors', 'you do not hav permission for the task');
+      req.session.save(function () {
+        res.redirect('/');
+      });
+    });
+};
