@@ -18,13 +18,14 @@ app.use(sessionOptions);
 app.use(flash());
 
 app.use(function (req, res, next) {
-  //make markdown available from within ejs
+  // make our markdown function available from within ejs templates
   res.locals.filterUserHTML = function (content) {
     return sanitizeHTML(markdown(content), {
       allowedTags: [
         'p',
         'br',
         'ul',
+        'ol',
         'li',
         'strong',
         'bold',
@@ -40,6 +41,7 @@ app.use(function (req, res, next) {
       allowedAttributes: {},
     });
   };
+
   // make all error and success flash messages available from all templates
   res.locals.errors = req.flash('errors');
   res.locals.success = req.flash('success');
@@ -67,4 +69,14 @@ app.set('view engine', 'ejs');
 
 app.use('/', router);
 
-module.exports = app;
+const server = require('http').createServer(app);
+
+const io = require('socket.io')(server);
+
+io.on('connection', function (socket) {
+  socket.on('chatMessageFromBrowser', function (data) {
+    io.emit('chatMessageFromServer', { message: data.message });
+  });
+});
+
+module.exports = server;
