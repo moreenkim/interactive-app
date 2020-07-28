@@ -122,6 +122,7 @@ exports.profilePostsScreen = function (req, res) {
     .then(function (posts) {
       console.log(req.profileUser);
       res.render('profile', {
+        title: `profile for ${req.profileUser.username}`,
         currentPage: 'posts',
         posts: posts,
         profileUsername: req.profileUser.username,
