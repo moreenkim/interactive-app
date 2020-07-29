@@ -7,6 +7,11 @@ const csrf = require('csurf');
 const app = express();
 const sanitizeHTML = require('sanitize-html');
 
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+app.use('/api', require('./router-api'));
+
 let sessionOptions = session({
   secret: 'JavaScript is sooooooooo coool',
   store: new MongoStore({ client: require('./db') }),
@@ -61,9 +66,6 @@ app.use(function (req, res, next) {
 
 const router = require('./router');
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
 app.use(express.static('public'));
 app.set('views', 'views');
 app.set('view engine', 'ejs');
@@ -80,7 +82,7 @@ app.use('/', router);
 app.use(function (err, req, res, next) {
   if (err) {
     if (err.code == 'EBADCSRFTOKEN') {
-      req.flash('errors', 'Cross site request forgery detected');
+      req.flash('errors', 'Cross site request forgery detected.');
       req.session.save(() => res.redirect('/'));
     } else {
       res.render('404');
