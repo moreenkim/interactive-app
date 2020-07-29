@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="/main.css" />
   </head>
   <body>
-    <header class="header-bar mb-3">
+    <header class="header-bar mb-3" ;>
       <div
         class="container d-flex flex-column flex-md-row align-items-center p-3"
       >
@@ -34,8 +34,7 @@
           <a href="/" class="text-white">OurApp</a>
         </h4>
 
-        <%if(user){ %>
-
+        <% if (user) { %>
         <div class="flex-row my-3 my-md-0">
           <a
             href="#"
@@ -52,7 +51,7 @@
             data-placement="bottom"
             ><i class="fas fa-comment"></i
           ></span>
-          <a href="/profile/<%= user.username%>" class="mr-2"
+          <a href="/profile/<%= user.username %>" class="mr-2"
             ><img
               title="My Profile"
               data-toggle="tooltip"
@@ -64,10 +63,10 @@
             >Create Post</a
           >
           <form action="/logout" method="POST" class="d-inline">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
             <button class="btn btn-sm btn-secondary">Sign Out</button>
           </form>
         </div>
-
         <% } else { %>
         <form action="/login" method="POST" class="mb-0 pt-2 pt-md-0">
           <div class="row align-items-center">
@@ -89,11 +88,11 @@
               />
             </div>
             <div class="col-md-auto">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
               <button class="btn btn-primary btn-sm">Sign In</button>
             </div>
           </div>
         </form>
-
         <% } %>
       </div>
     </header>
